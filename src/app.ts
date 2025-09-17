@@ -1,0 +1,33 @@
+import express, { Express, Request, Response } from "express";
+import morgan from "morgan";
+
+const app: Express = express();
+app.use(morgan("combined"));
+
+/**
+ * Represents a response structure for a health check endpoint
+ */
+  interface HealthCheck {
+    /** The current status of the server */
+    status: string;
+    /** How long the server has been running */
+    uptime: number;
+    /** The current server timestamp */
+    timestamp: string;
+     /** The API's version */
+    version: string;
+  }
+
+  // Health check endpoint
+  app.get("/api/v1/health", (req: Request, res: Response) => {
+  const healthData: HealthCheck = {
+    status: "OK",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    version: "1.0.0",
+  };
+
+  res.json(healthData);
+});
+
+export default app;
