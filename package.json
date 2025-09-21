@@ -19,7 +19,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
+   "scripts": {
+    "start": "ts-node src/server.ts",
+    "build": "tsc",
     "test": "jest"
   },
   "repository": {

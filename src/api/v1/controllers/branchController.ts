@@ -42,7 +42,7 @@ export const createBranch = async (
             res.status(HTTP_STATUS.BAD_REQUEST).json({
                 message: "Branch name is required",
             });
-        } else if (!req.body.location) {
+        } else if (!req.body.address) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
                 message: "Branch address is required",
             });
