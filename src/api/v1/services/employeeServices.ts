@@ -1,12 +1,14 @@
 import { Employee } from "../models/employeeModel";
 import { employees } from "../../../data/employees"
+import { Branch } from "../models/branchModel";
+import { branches } from "src/data/branches";
 
 // In-memory storage
 const employeeStorage: Employee[] = [...employees];
 
 /**
  * Get all employees
- * @returns Array of all employees
+ * @returns - Array of all employees
  */
 export const getAllEmployees = async (): Promise<Employee[]> => {
     return structuredClone(employeeStorage);
@@ -14,11 +16,13 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
 
 /**
  * Get an employee by ID
- * @param id Employee ID
- * @returns Employee object
- * @throws Error if employee not found
+ * @param id - Employee ID
+ * @returns - Employee object
+ * @throws - Error if employee not found
  */
-export const getEmployeeById = async (id: number): Promise<Employee> => {
+export const getEmployeeById = async (
+    id: number
+): Promise<Employee> => {
     const employee = employeeStorage.find(e => e.id === id);
 
     if (!employee) {
@@ -30,8 +34,8 @@ export const getEmployeeById = async (id: number): Promise<Employee> => {
 
 /**
  * Create a new employee
- * @param employeeData The data for the new employee
- * @returns The created employee with generated ID
+ * @param employeeData - The data for the new employee
+ * @returns - The created employee with generated ID
  */
 export const createEmployee = async (
     employeeData: Omit<Employee, "id">
@@ -48,10 +52,10 @@ export const createEmployee = async (
 
 /**
  * Update an existing employee
- * @param id Employee ID
- * @param employeeData Fields to update
- * @returns Updated employee
- * @throws Error if employee not found
+ * @param id - Employee ID
+ * @param employeeData - Fields to update
+ * @returns - Updated employee
+ * @throws - Error if employee not found
  */
 export const updateEmployee = async (
     id: number,
@@ -73,10 +77,12 @@ export const updateEmployee = async (
 
 /**
  * Delete an employee
- * @param id Employee ID
- * @throws Error if employee not found
+ * @param id - Employee ID
+ * @throws - Error if employee not found
  */
-export const deleteEmployee = async (id: number): Promise<void> => {
+export const deleteEmployee = async (
+    id: number
+): Promise<void> => {
     const index = employeeStorage.findIndex(e => e.id === id);
 
     if (index === -1) {
@@ -84,4 +90,30 @@ export const deleteEmployee = async (id: number): Promise<void> => {
     }
 
     employeeStorage.splice(index, 1);
+};
+
+/**
+ * Get all employees from a specific branch
+ * @param branchId - Branch ID
+ * @throws -Error if Branch ID not found
+ */
+export const getEmployeesByBranch = async (
+    branchId: number
+): Promise<Employee[]> => {
+    if (!branchId) throw new Error("Branch ID is required");
+
+    return structuredClone(employeeStorage.filter(e => e.branchId === branchId));
+};
+
+/**
+ * Get all employees from a specific department
+ * @param department - department where employee is from
+ * @throws - Error if department not found
+ */
+export const getEmployeesByDepartment = async (
+    department: string
+): Promise<Employee[]> => {
+    if (!department) throw new Error("Department is required");
+
+    return structuredClone(employeeStorage.filter(e => e.department === department));
 };

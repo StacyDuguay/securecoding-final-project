@@ -6,7 +6,7 @@ const branchStorage: Branch[] = [...branches];
 
 /**
  * Get all branches
- * @returns Array of all branches
+ * @returns - Array of all branches
  */
 export const getAllBranches = async (): Promise<Branch[]> => {
     return structuredClone(branchStorage);
@@ -14,11 +14,13 @@ export const getAllBranches = async (): Promise<Branch[]> => {
 
 /**
  * Get a branch by ID
- * @param id Branch ID
- * @returns Branch object
- * @throws Error if branch not found
+ * @param id - Branch ID
+ * @returns - Branch object
+ * @throws - Error if branch not found
  */
-export const getBranchById = async (id: number): Promise<Branch> => {
+export const getBranchById = async (
+    id: number
+): Promise<Branch> => {
     const branch = branchStorage.find(b => b.id === id);
 
     if (!branch) {
@@ -30,8 +32,8 @@ export const getBranchById = async (id: number): Promise<Branch> => {
 
 /**
  * Create a new branch
- * @param branchData The data for the new branch
- * @returns The created branch with generated ID
+ * @param branchData - The data for the new branch
+ * @returns - The created branch with generated ID
  */
 export const createBranch = async (
     branchData: Omit<Branch, "id">
@@ -48,10 +50,10 @@ export const createBranch = async (
 
 /**
  * Update an existing branch
- * @param id Branch ID
- * @param branchData Fields to update
- * @returns Updated branch
- * @throws Error if branch not found
+ * @param id - Branch ID
+ * @param branchData - Fields to update
+ * @returns - Updated branch
+ * @throws - Error if branch not found
  */
 export const updateBranch = async (
     id: number,
@@ -73,10 +75,12 @@ export const updateBranch = async (
 
 /**
  * Delete a branch
- * @param id Branch ID
- * @throws Error if branch not found
+ * @param id - Branch ID
+ * @throws - Error if branch not found
  */
-export const deleteBranch = async (id: number): Promise<void> => {
+export const deleteBranch = async (
+    id: number
+): Promise<void> => {
     const index = branchStorage.findIndex(b => b.id === id);
 
     if (index === -1) {
