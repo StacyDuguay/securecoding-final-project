@@ -1,4 +1,5 @@
-import { Branch, branches } from "../../../data/branches";
+import { Branch } from "../models/branchModel";
+import { branches } from "../../../data/branches"
 
 // In-memory storage
 const branchStorage: Branch[] = [...branches];
