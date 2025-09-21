@@ -1,4 +1,5 @@
-import { Employee, employees } from "../../../data/employees";
+import { Employee } from "../models/employeeModel";
+import { employees } from "../../../data/employees"
 
 // In-memory storage
 const employeeStorage: Employee[] = [...employees];
@@ -50,7 +51,7 @@ export const updateEmployee = async (
         ...employeeStorage[index],
         ...employeeData 
     };
-    
+
     return structuredClone(employeeStorage[index]);
 };
 
