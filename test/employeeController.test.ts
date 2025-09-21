@@ -3,6 +3,7 @@ import * as employeeController from "../src/api/v1/controllers/employeeControlle
 import * as employeeService from "../src/api/v1/services/employeeServices";
 import { Employee } from "../src/api/v1/models/employeeModel";
 import { HTTP_STATUS } from "../src/constants/httpConstants";
+import { Http2ServerResponse } from "node:http2";
 
 jest.mock("../src/api/v1/services/employeeServices");
 
@@ -28,8 +29,8 @@ describe("Employee Controller", () => {
                 { 
                     id: 1, 
                     name: "Alice", 
-                    position: "Dev", 
-                    department: "IT", 
+                    position: "Developer", 
+                    department: "Developer Team", 
                     email: "alice@test.com", 
                     phone: "555-1234", 
                     branchId: 1 
@@ -38,7 +39,11 @@ describe("Employee Controller", () => {
             (employeeService.getAllEmployees as jest.Mock).mockResolvedValue(mockEmployees);
 
             // Act
-            await employeeController.getAllEmployees(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.getAllEmployees(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.OK);
@@ -51,13 +56,17 @@ describe("Employee Controller", () => {
         it("should call next with error on failure", async () => {
             // Arrange
             const error = new Error("Service error");
-            (employeeService.getAllEmployees as jest.Mock).mockRejectedValue(error);
+            (employeeService.getAllEmployees as jest.Mock).mockRejectedValue(HTTP_STATUS.BAD_REQUEST);
 
             // Act
-            await employeeController.getAllEmployees(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.getAllEmployees(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
-            expect(mockNext).toHaveBeenCalledWith(error);
+            expect(mockNext).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
         });
     });
 
@@ -71,8 +80,8 @@ describe("Employee Controller", () => {
             const mockEmployee: Employee = { 
                 id: 1, 
                 name: "Alice", 
-                position: "Dev", 
-                department: "IT", 
+                position: "Developer", 
+                department: "Developer Team", 
                 email: "alice@test.com", 
                 phone: "555-1234", 
                 branchId: 1 
@@ -81,7 +90,11 @@ describe("Employee Controller", () => {
             (employeeService.getEmployeeById as jest.Mock).mockResolvedValue(mockEmployee);
 
             // Act
-            await employeeController.getEmployeeById(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.getEmployeeById(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.OK);
@@ -96,7 +109,11 @@ describe("Employee Controller", () => {
             // mockReq.params.id is undefined
 
             // Act
-            await employeeController.getEmployeeById(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.getEmployeeById(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
@@ -109,7 +126,11 @@ describe("Employee Controller", () => {
             (employeeService.getEmployeeById as jest.Mock).mockResolvedValue(null);
 
             // Act
-            await employeeController.getEmployeeById(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.getEmployeeById(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.NOT_FOUND);
@@ -126,8 +147,8 @@ describe("Employee Controller", () => {
             // Arrange
             const mockBody = { 
                 name: "Alice", 
-                position: "Dev", 
-                department: "IT", 
+                position: "Developer", 
+                department: "Developer Team", 
                 email: "alice@test.com", 
                 phone: "555-1234", 
                 branchId: 1 
@@ -137,7 +158,11 @@ describe("Employee Controller", () => {
             (employeeService.createEmployee as jest.Mock).mockResolvedValue(mockEmployee);
 
             // Act
-            await employeeController.createEmployee(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.createEmployee(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.CREATED);
@@ -149,10 +174,14 @@ describe("Employee Controller", () => {
 
         it("should return 400 if required fields are missing", async () => {
             // Arrange
-            mockReq.body = { position: "Dev" }; // name missing
+            mockReq.body = { position: "Developer" }; 
 
             // Act
-            await employeeController.createEmployee(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.createEmployee(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
@@ -180,7 +209,11 @@ describe("Employee Controller", () => {
             (employeeService.updateEmployee as jest.Mock).mockResolvedValue(mockEmployee);
 
             // Act
-            await employeeController.updateEmployee(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.updateEmployee(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.OK);
@@ -192,15 +225,19 @@ describe("Employee Controller", () => {
 
         it("should call next with error on failure", async () => {
             // Arrange
-            const error = new Error("Service error");
+
             mockReq.params = { id: "1" };
-            (employeeService.updateEmployee as jest.Mock).mockRejectedValue(error);
+            (employeeService.updateEmployee as jest.Mock).mockRejectedValue(HTTP_STATUS.BAD_REQUEST);
 
             // Act
-            await employeeController.updateEmployee(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.updateEmployee(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
-            expect(mockNext).toHaveBeenCalledWith(error);
+            expect(mockNext).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
         });
     });
 
@@ -214,7 +251,11 @@ describe("Employee Controller", () => {
             mockReq.params = { id: "1" };
 
             // Act
-            await employeeController.deleteEmployee(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.deleteEmployee(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
             expect(employeeService.deleteEmployee).toHaveBeenCalledWith(1);
@@ -226,15 +267,118 @@ describe("Employee Controller", () => {
 
         it("should call next with error on failure", async () => {
             // Arrange
-            const error = new Error("Service error");
             mockReq.params = { id: "1" };
-            (employeeService.deleteEmployee as jest.Mock).mockRejectedValue(error);
+            (employeeService.deleteEmployee as jest.Mock).mockRejectedValue(HTTP_STATUS.BAD_REQUEST);
 
             // Act
-            await employeeController.deleteEmployee(mockReq as Request, mockRes as Response, mockNext);
+            await employeeController.deleteEmployee(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
 
             // Assert
-            expect(mockNext).toHaveBeenCalledWith(error);
+            expect(mockNext).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
+        });
+
+    /**
+     * getEmployeesByBranch
+     */
+
+    describe("getEmployeesByBranch", () => {
+        it("should return employees for a branch", async () => {
+            // Arrange
+            const mockEmployees = [{ 
+                id: 1, 
+                name: "John", 
+                branchId: 1, 
+                position:"Dev", 
+                department:"IT", 
+                email:"a@b.com", 
+                phone:"123"
+            }];
+            mockReq.params = { branchId: "1" };
+            (employeeService.getEmployeesByBranch as jest.Mock).mockResolvedValue(mockEmployees);
+
+            // Act
+            await employeeController.getEmployeesByBranch(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
+
+            // Assert
+            expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.OK);
+            expect(mockRes.json).toHaveBeenCalledWith({ 
+                message: "Employees for branch retrieved successfully", data: mockEmployees 
+            });
+        });
+
+        it("should return 400 if branchId is missing", async () => {
+            // Arrange
+            mockReq.params = {};
+
+            // Act
+            await employeeController.getEmployeesByBranch(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
+
+            // Assert
+            expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
+            expect(mockRes.json).toHaveBeenCalledWith({ message: "Branch ID is required" });
+        });
+    });
+
+    /**
+     * getEmployeeByDepartment
+     */
+
+    describe("getEmployeesByDepartment", () => {
+        it("should return employees for a department", async () => {
+            // Arrange
+            const mockEmployees = [{ 
+                id: 1, 
+                name: "John", 
+                branchId: 1, 
+                position:"Developer", 
+                department:"Developer Team", 
+                email:"a@b.com", 
+                phone:"123"
+            }];
+            mockReq.params = { department: "IT" };
+            (employeeService.getEmployeesByDepartment as jest.Mock).mockResolvedValue(mockEmployees);
+
+            // Act
+            await employeeController.getEmployeesByDepartment(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
+
+            // Assert
+            expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.OK);
+            expect(mockRes.json).toHaveBeenCalledWith({ 
+                message: "Employees for department retrieved successfully", data: mockEmployees 
+            });
+        });
+
+        it("should return 400 if department param is missing", async () => {
+            // Act
+            mockReq.params = {};
+
+            // Arrange
+            await employeeController.getEmployeesByDepartment(
+                mockReq as Request, 
+                mockRes as Response, 
+                mockNext
+            );
+
+            // Assert
+            expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
+            expect(mockRes.json).toHaveBeenCalledWith({ message: "Department is required" });
+            });
         });
     });
 });

@@ -50,8 +50,7 @@ describe("Branch Controller", () => {
 
         it("should call next with error on failure", async () => {
             // Arrange
-            const error = new Error("Service error");
-            (branchService.getAllBranches as jest.Mock).mockRejectedValue(error);
+            (branchService.getAllBranches as jest.Mock).mockRejectedValue(HTTP_STATUS.BAD_REQUEST);
 
             // Act
             await branchController.getAllBranches(
@@ -61,7 +60,7 @@ describe("Branch Controller", () => {
             );
 
             // Assert
-            expect(mockNext).toHaveBeenCalledWith(error);
+            expect(mockNext).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
         });
     });
 
@@ -219,9 +218,8 @@ describe("Branch Controller", () => {
 
         it("should call next with error on failure", async () => {
             // Arrange
-            const error = new Error("Service error");
             mockReq.params = { id: "1" };
-            (branchService.updateBranch as jest.Mock).mockRejectedValue(error);
+            (branchService.updateBranch as jest.Mock).mockRejectedValue(HTTP_STATUS.BAD_REQUEST);
 
             // Act
             await branchController.updateBranch(
@@ -231,7 +229,7 @@ describe("Branch Controller", () => {
             );
 
             // Assert
-            expect(mockNext).toHaveBeenCalledWith(error);
+            expect(mockNext).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
         });
     });
 
@@ -261,9 +259,8 @@ describe("Branch Controller", () => {
 
         it("should call next with error on failure", async () => {
             // Arrange
-            const error = new Error("Service error");
             mockReq.params = { id: "1" };
-            (branchService.deleteBranch as jest.Mock).mockRejectedValue(error);
+            (branchService.deleteBranch as jest.Mock).mockRejectedValue(HTTP_STATUS.BAD_REQUEST);
 
             // Act
             await branchController.deleteBranch(
@@ -273,7 +270,7 @@ describe("Branch Controller", () => {
             );
 
             // Assert
-            expect(mockNext).toHaveBeenCalledWith(error);
+            expect(mockNext).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
         });
     });
 });
