@@ -177,3 +177,65 @@ export const deleteEmployee = async (
         next(error);
     }
 };
+
+/**
+ * Get all employees from a specific branch
+ * @param req - The express Request
+ * @param res - The express Response
+ * @param next - The express middleware chaining function
+ */
+export const getEmployeesByBranch = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { branchId } = req.params;
+        if (!branchId) {
+            res.status(HTTP_STATUS.BAD_REQUEST).json({
+                 message: "Branch ID is required" 
+                });
+            return;
+        }
+
+        const employees = await employeeService.getEmployeesByBranch(Number(branchId));
+
+        res.status(HTTP_STATUS.OK).json({
+            message: "Employees for branch retrieved successfully",
+            data: employees,
+        });
+    } catch (error: unknown) {
+        next(error);
+    }
+};
+
+/**
+ * Get all employees from a specific department
+ * @param req - The express Request
+ * @param res - The express Response
+ * @param next - The express middleware chaining function
+ */
+export const getEmployeesByDepartment = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { department } = req.params;
+        if (!department) {
+            res.status(HTTP_STATUS.BAD_REQUEST).json({ 
+                message: "Department is required" 
+            });
+            return;
+        }
+
+        const employees = await employeeService.getEmployeesByDepartment(department);
+
+        res.status(HTTP_STATUS.OK).json({
+            message: "Employees for department retrieved successfully",
+            data: employees,
+        });
+    } catch (error: unknown) {
+        next(error);
+    }
+};
