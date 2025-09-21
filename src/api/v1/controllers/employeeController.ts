@@ -22,6 +22,39 @@ export const getAllEmployees = async (
     }
 };
 
+export const getEmployeeById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            res.status(HTTP_STATUS.BAD_REQUEST).json({
+                message: "Employee ID is required",
+            });
+            return;
+        }
+
+        const employee: Employee | null = await employeeService.getEmployeeById(Number(id));
+
+        if (!employee) {
+            res.status(HTTP_STATUS.NOT_FOUND).json({
+                message: `Employee with ID ${id} not found`,
+            });
+            return;
+        }
+
+        res.status(HTTP_STATUS.OK).json({
+            message: "Employee retrieved successfully",
+            data: employee,
+        });
+    } catch (error: unknown) {
+        next(error);
+    }
+};
+
 /**
  * Manages requests, responses, and validation to create an Employee
  */
