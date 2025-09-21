@@ -1,8 +1,13 @@
 import express, { Express, Request, Response } from "express";
 import morgan from "morgan";
+import employeeRoutes from "./api/v1/routes/employeeRoutes";
+import branchRoutes from "./api/v1/routes/branchRoutes";
+
 
 const app: Express = express();
 app.use(morgan("combined"));
+app.use("/api/v1/employees", employeeRoutes);
+app.use("/api/v1/branches", branchRoutes);
 
 /**
  * Represents a response structure for a health check endpoint

@@ -3,11 +3,12 @@ import app from "../src/app";
 import * as branchController from "../src/api/v1/controllers/branchController";
 import { HTTP_STATUS } from "../src/constants/httpConstants";
 
-jest.mock("../src/api/v1/controllers/itemController", () => ({
-    getAllItems: jest.fn((req, res) => res.status(HTTP_STATUS.OK).send()),
-    createItem: jest.fn((req, res) => res.status(HTTP_STATUS.CREATED).send()),
-    updateItem: jest.fn((req, res) => res.status(HTTP_STATUS.OK).send()),
-    deleteItem: jest.fn((req, res) => res.status(HTTP_STATUS.OK).send()),
+jest.mock("../src/api/v1/controllers/branchController.ts", () => ({
+    getAllBranches: jest.fn((req, res) => res.status(HTTP_STATUS.OK).send()),
+    getBranchById: jest.fn((req, res) => res.status(HTTP_STATUS.OK).send()),
+    createBranch: jest.fn((req, res) => res.status(HTTP_STATUS.CREATED).send()),
+    updateBranch: jest.fn((req, res) => res.status(HTTP_STATUS.OK).send()),
+    deleteBranch: jest.fn((req, res) => res.status(HTTP_STATUS.OK).send()),
 }));
 
 describe("Branch Routes", () => {
@@ -19,6 +20,13 @@ describe("Branch Routes", () => {
         it("should call getAllBranches controller", async () => {
             await request(app).get("/api/v1/branches/");
             expect(branchController.getAllBranches).toHaveBeenCalled();
+        });
+    });
+
+    describe("GET /api/v1/branches/:id", () => {
+        it("should call getBranchById controller with valid ID", async () => {
+            await request(app).get("/api/v1/branches/1");
+            expect(branchController.getBranchById).toHaveBeenCalled();
         });
     });
 
