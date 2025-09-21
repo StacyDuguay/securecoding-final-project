@@ -5,6 +5,9 @@ import { Employee } from "../models/employeeModel";
 
 /**
  * Manages requests and responses to retrieve all Employees
+ * @param req - The express Request
+ * @param res - The express Response
+ * @param next - The express middleware chaining function
  */
 export const getAllEmployees = async (
     req: Request,
@@ -22,6 +25,12 @@ export const getAllEmployees = async (
     }
 };
 
+/**
+ * Manages requests and responses to get an Employee by ID
+ * @param req - The express Request
+ * @param res - The express Response
+ * @param next - The express middleware chaining function
+ */
 export const getEmployeeById = async (
     req: Request,
     res: Response,
@@ -57,6 +66,9 @@ export const getEmployeeById = async (
 
 /**
  * Manages requests, responses, and validation to create an Employee
+ * @param req - The express Request
+ * @param res - The express Response
+ * @param next - The express middleware chaining function
  */
 export const createEmployee = async (
     req: Request,
@@ -112,6 +124,9 @@ export const createEmployee = async (
 
 /**
  * Manages requests and responses to update an Employee
+ * @param req - The express Request
+ * @param res - The express Response
+ * @param next - The express middleware chaining function
  */
 export const updateEmployee = async (
     req: Request,
@@ -142,6 +157,9 @@ export const updateEmployee = async (
 
 /**
  * Manages requests and responses to delete an Employee
+ * @param req - The express Request
+ * @param res - The express Response
+ * @param next - The express middleware chaining function
  */
 export const deleteEmployee = async (
     req: Request,

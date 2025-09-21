@@ -26,6 +26,45 @@ export const getAllBranches = async (
 };
 
 /**
+ * Manages requests and responses to get an Employee by ID
+ * @param req - The express Request
+ * @param res - The express Response
+ * @param next - The express middleware chaining function
+ */
+export const getBranchById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            res.status(HTTP_STATUS.BAD_REQUEST).json({
+                message: "Branch ID is required",
+            });
+            return;
+        }
+
+        const branch: Branch | null = await branchService.getBranchById(Number(id));
+
+        if (!branch) {
+            res.status(HTTP_STATUS.NOT_FOUND).json({
+                message: `Branch with ID ${id} not found`,
+            });
+            return;
+        }
+
+        res.status(HTTP_STATUS.OK).json({
+            message: "Branch retrieved successfully",
+            data: branch,
+        });
+    } catch (error: unknown) {
+        next(error);
+    }
+};
+
+/**
  * Manages requests, responses, and validation to create a Branch
  * @param req - The express Request
  * @param res - The express Response
