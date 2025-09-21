@@ -1,4 +1,4 @@
-import { Employee, employees } from "../data/employees";
+import { Employee, employees } from "../../../data/employees";
 
 // In-memory storage
 const employeeStorage: Employee[] = [...employees];
@@ -16,14 +16,17 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
  * @param employeeData The data for the new employee
  * @returns The created employee with generated ID
  */
-export const createEmployee = async (employeeData: Omit<Employee, "id">): Promise<Employee> => {
+export const createEmployee = async (
+    employeeData: Omit<Employee, "id">
+): Promise<Employee> => {
     const newEmployee: Employee = {
-        id: employeeStorage.length > 0 ? Math.max(...employeeStorage.map(e => e.id)) + 1 : 1,
-        ...employeeData,
-    };
+    id: Date.now(), 
+    ...employeeData,
+  };
 
-    employeeStorage.push(newEmployee);
-    return structuredClone(newEmployee);
+  employeeStorage.push(newEmployee);
+  
+  return structuredClone(newEmployee);
 };
 
 /**
@@ -38,9 +41,16 @@ export const updateEmployee = async (
     employeeData: Partial<Omit<Employee, "id">>
 ): Promise<Employee> => {
     const index = employeeStorage.findIndex(e => e.id === id);
-    if (index === -1) throw new Error(`Employee with ID ${id} not found`);
 
-    employeeStorage[index] = { ...employeeStorage[index], ...employeeData };
+    if (index === -1) {
+        throw new Error(`Employee with ID ${id} not found`)
+    };
+
+    employeeStorage[index] = { 
+        ...employeeStorage[index],
+        ...employeeData 
+    };
+    
     return structuredClone(employeeStorage[index]);
 };
 
@@ -51,7 +61,10 @@ export const updateEmployee = async (
  */
 export const deleteEmployee = async (id: number): Promise<void> => {
     const index = employeeStorage.findIndex(e => e.id === id);
-    if (index === -1) throw new Error(`Employee with ID ${id} not found`);
+
+    if (index === -1) {
+        throw new Error(`Employee with ID ${id} not found`)
+    }
 
     employeeStorage.splice(index, 1);
 };
