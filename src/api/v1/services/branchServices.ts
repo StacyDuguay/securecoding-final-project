@@ -13,6 +13,22 @@ export const getAllBranches = async (): Promise<Branch[]> => {
 };
 
 /**
+ * Get a branch by ID
+ * @param id Branch ID
+ * @returns Branch object
+ * @throws Error if branch not found
+ */
+export const getBranchById = async (id: number): Promise<Branch> => {
+    const branch = branchStorage.find(b => b.id === id);
+
+    if (!branch) {
+        throw new Error(`Branch with ID ${id} not found`);
+    }
+
+    return structuredClone(branch);
+};
+
+/**
  * Create a new branch
  * @param branchData The data for the new branch
  * @returns The created branch with generated ID
