@@ -23,7 +23,7 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
 export const getEmployeeById = async (
     id: number
 ): Promise<Employee> => {
-    const employee = employeeStorage.find(e => e.id === id);
+    const employee: Employee | undefined = employeeStorage.find(e => e.id === id);
 
     if (!employee) {
         throw new Error(`Employee with ID ${id} not found`);
@@ -61,7 +61,7 @@ export const updateEmployee = async (
     id: number,
     employeeData: Partial<Omit<Employee, "id">>
 ): Promise<Employee> => {
-    const index = employeeStorage.findIndex(e => e.id === id);
+    const index: number = employeeStorage.findIndex(e => e.id === id);
 
     if (index === -1) {
         throw new Error(`Employee with ID ${id} not found`)
@@ -83,7 +83,7 @@ export const updateEmployee = async (
 export const deleteEmployee = async (
     id: number
 ): Promise<void> => {
-    const index = employeeStorage.findIndex(e => e.id === id);
+    const index: number = employeeStorage.findIndex(e => e.id === id);
 
     if (index === -1) {
         throw new Error(`Employee with ID ${id} not found`)

@@ -26,7 +26,7 @@ export const getAllBranches = async (
 };
 
 /**
- * Manages requests and responses to get an Employee by ID
+ * Manages requests and responses to get a Branch by ID
  * @param req - The express Request
  * @param res - The express Response
  * @param next - The express middleware chaining function
@@ -37,7 +37,7 @@ export const getBranchById = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { id } = req.params;
+        const { id }: { id?: string } = req.params;
 
         if (!id) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -76,29 +76,46 @@ export const createBranch = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        // Basic validation - check for required fields
-        if (!req.body.name) {
+        const {
+            name,
+            address,
+            phone,
+        }: {
+            name?: string;
+            address?: string;
+            phone?: string;
+        } = req.body;
+
+        if (!name) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
                 message: "Branch name is required",
             });
-        } else if (!req.body.address) {
+            return;
+        } 
+        if (!address) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
                 message: "Branch address is required",
             });
-        } else if (!req.body.phone) {
+            return;
+        } 
+        if (!phone) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
                 message: "Branch phone is required",
             });
-        } else {
-            const { name, address, phone } = req.body;
+            return;
+        }  
 
-            const newBranch: Branch = await branchService.createBranch({ name, address, phone });
+            const newBranch: Branch = await branchService.createBranch({
+                name, 
+                address, 
+                phone 
+            });
 
             res.status(HTTP_STATUS.CREATED).json({
                 message: "Branch created successfully",
                 data: newBranch,
             });
-        }
+        
     } catch (error: unknown) {
         next(error);
     }
@@ -116,8 +133,16 @@ export const updateBranch = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { id } = req.params;
-        const { name, address, phone } = req.body;
+        const { id }: { id?: string } = req.params;
+        const {
+            name,
+            address,
+            phone,
+        }: {
+            name?: string;
+            address?: string;
+            phone?: string;
+        } = req.body;
 
         const updatedBranch: Branch = await branchService.updateBranch(Number(id), {
             name,
@@ -146,7 +171,7 @@ export const deleteBranch = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { id } = req.params;
+        const { id }: { id?: string } = req.params;
 
         await branchService.deleteBranch(Number(id));
         res.status(HTTP_STATUS.OK).json({

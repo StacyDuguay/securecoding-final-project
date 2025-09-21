@@ -21,7 +21,7 @@ export const getAllBranches = async (): Promise<Branch[]> => {
 export const getBranchById = async (
     id: number
 ): Promise<Branch> => {
-    const branch = branchStorage.find(b => b.id === id);
+    const branch: Branch | undefined = branchStorage.find(b => b.id === id);
 
     if (!branch) {
         throw new Error(`Branch with ID ${id} not found`);
@@ -39,7 +39,7 @@ export const createBranch = async (
     branchData: Omit<Branch, "id">
 ): Promise<Branch> => {
     const newBranch: Branch = {
-    id: Date.now(), // unique enough for in-memory storage
+    id: Date.now(), 
     ...branchData,
   };
 
@@ -59,7 +59,7 @@ export const updateBranch = async (
     id: number,
     branchData: Partial<Omit<Branch, "id">>
 ): Promise<Branch> => {
-    const index = branchStorage.findIndex(b => b.id === id);
+    const index: number = branchStorage.findIndex(b => b.id === id);
     
     if (index === -1) {
         throw new Error(`Branch with ID ${id} not found`)
@@ -81,7 +81,7 @@ export const updateBranch = async (
 export const deleteBranch = async (
     id: number
 ): Promise<void> => {
-    const index = branchStorage.findIndex(b => b.id === id);
+    const index: number = branchStorage.findIndex(b => b.id === id);
 
     if (index === -1) {
         throw new Error(`Branch with ID ${id} not found`)

@@ -37,7 +37,7 @@ export const getEmployeeById = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { id } = req.params;
+        const { id }: { id?: string } = req.params;
 
         if (!id) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -76,9 +76,22 @@ export const createEmployee = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { name, position, department, email, phone, branchId } = req.body;
+        const {
+            name, 
+            position,
+            department, 
+            email, 
+            phone, 
+            branchId 
+        }: {
+            name?: string;
+            position?: string;
+            department?: string;
+            email?: string;
+            phone?: string;
+            branchId?: number
+        }= req.body;
 
-        // Basic validation
         if (!name) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "Employee name is required" });
             return;
@@ -134,8 +147,22 @@ export const updateEmployee = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { id } = req.params;
-        const { name, position, department, email, phone, branchId } = req.body;
+        const { id }: {id?: number} = req.params;
+        const {
+            name, 
+            position,
+            department, 
+            email, 
+            phone, 
+            branchId 
+        }: {
+            name?: string;
+            position?: string;
+            department?: string;
+            email?: string;
+            phone?: string;
+            branchId?: number
+        }= req.body;
 
         const updatedEmployee: Employee = await employeeService.updateEmployee(Number(id), {
             name,
@@ -167,7 +194,7 @@ export const deleteEmployee = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { id } = req.params;
+        const { id }: {id?: string} = req.params;
 
         await employeeService.deleteEmployee(Number(id));
         res.status(HTTP_STATUS.OK).json({
@@ -190,7 +217,7 @@ export const getEmployeesByBranch = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { branchId } = req.params;
+        const { branchId }: {branchId?: string} = req.params;
         if (!branchId) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
                  message: "Branch ID is required" 
@@ -221,7 +248,7 @@ export const getEmployeesByDepartment = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { department } = req.params;
+        const { department }: {department?: string} = req.params;
         if (!department) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({ 
                 message: "Department is required" 
