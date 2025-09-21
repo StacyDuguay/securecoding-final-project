@@ -13,6 +13,22 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
 };
 
 /**
+ * Get an employee by ID
+ * @param id Employee ID
+ * @returns Employee object
+ * @throws Error if employee not found
+ */
+export const getEmployeeById = async (id: number): Promise<Employee> => {
+    const employee = employeeStorage.find(e => e.id === id);
+
+    if (!employee) {
+        throw new Error(`Employee with ID ${id} not found`);
+    }
+
+    return structuredClone(employee);
+};
+
+/**
  * Create a new employee
  * @param employeeData The data for the new employee
  * @returns The created employee with generated ID
