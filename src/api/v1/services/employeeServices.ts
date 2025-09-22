@@ -96,11 +96,16 @@ export const deleteEmployee = async (
  * Get all employees from a specific branch
  * @param branchId - Branch ID
  * @throws -Error if Branch ID not found
+ * @throws - Error if no employees are found within branch
  */
 export const getEmployeesByBranch = async (
     branchId: number
 ): Promise<Employee[]> => {
     if (!branchId) throw new Error("Branch ID is required");
+
+    if (employees.length === 0) {
+        throw new Error(`No employees found for branch ID ${branchId}`);
+    }
 
     return structuredClone(employeeStorage.filter(e => e.branchId === branchId));
 };

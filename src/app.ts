@@ -6,6 +6,8 @@ import branchRoutes from "./api/v1/routes/branchRoutes";
 
 const app: Express = express();
 app.use(morgan("combined"));
+app.use(express.json());
+
 app.use("/api/v1/employees", employeeRoutes);
 app.use("/api/v1/branches", branchRoutes);
 
