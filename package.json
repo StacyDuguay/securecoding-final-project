@@ -1,4 +1,6 @@
 {
+ main
+
   "dependencies": {
     "@types/express": "^5.0.3",
     "express": "^5.1.0",
@@ -15,14 +17,20 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
+ development
   "name": "assignment_two",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+ main
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+
    "scripts": {
     "start": "ts-node src/server.ts",
     "build": "tsc",
     "test": "jest"
+ development
   },
   "repository": {
     "type": "git",
@@ -34,5 +42,19 @@
   "bugs": {
     "url": "https://github.com/StacyDuguay/assignment-two-BED/issues"
   },
+ main
+  "homepage": "https://github.com/StacyDuguay/assignment-two-BED#readme",
+  "devDependencies": {
+    "@types/node": "^24.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.3",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1"
+  }
+=======
   "homepage": "https://github.com/StacyDuguay/assignment-two-BED#readme"
+ development
 }
