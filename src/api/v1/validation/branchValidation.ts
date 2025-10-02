@@ -11,10 +11,12 @@ export const branchSchemas = {
                 "any.required": "Address is required",
                 "string.empty": "Address is mandatory"
             }),
-            phone: Joi.number().required().messages({
+            phone: Joi.string().pattern(/^[0-9\-+() ]{7,20}$/).required()
+            .messages({
                 "any.required": "Phone number is required",
-                "number.empty": "Phone number cannot be empty"
-            }),
+                "string.empty": "Phone number cannot be empty",
+                "string.pattern.base": "Phone number must be valid",
+        }),
         }),
     },
 
@@ -26,15 +28,16 @@ export const branchSchemas = {
             }),
         }),
         body: Joi.object({
-            name: Joi.string().required().messages({
+            name: Joi.string().optional().messages({
                 "string.empty": "Name cannot be empty"
             }),
-            address: Joi.string().required().messages({
+            address: Joi.string().optional().messages({
                 "string.empty": "Address is mandatory"
             }),
-            phone: Joi.number().required().messages({
-                "number.empty": "Phone number cannot be empty"
-            })
+             phone: Joi.string().pattern(/^[0-9\-+() ]{7,20}$/).optional()
+            .messages({
+                "string.pattern.base": "Phone number must be valid",
+        }),
         })
     }
 }
