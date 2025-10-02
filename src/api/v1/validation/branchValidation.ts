@@ -19,7 +19,6 @@ export const branchSchemas = {
         }),
         }),
     },
-
     update: {
         params: Joi.object({
             id: Joi.string().required().messages({
