@@ -68,4 +68,12 @@ export const employeeSchemas = {
             }),
         }),
     }, 
+    delete: {
+    params: Joi.object({
+        id: Joi.string().required().messages({
+            "any.required": "Employee ID is required",
+            "string.empty": "Employee ID cannot be empty",
+        }),
+    }),
+},
 }
