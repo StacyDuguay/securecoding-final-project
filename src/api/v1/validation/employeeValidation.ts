@@ -19,8 +19,8 @@ export const employeeSchemas = {
             .email({ minDomainSegments: 2, tlds: { allow: ['com', 'ca', 'gov', 'net']}})
             .required()
             .messages({
-                "any.required": "Email is required",
                 "string.email": "Email must be valid",
+                "any.required": "Email is required",
                 "string.empty": "Email cannot be empty"
             }),
             phone: Joi.string().pattern(/^[0-9\-+() ]{7,20}$/).required()
@@ -51,8 +51,12 @@ export const employeeSchemas = {
             department: Joi.string().optional().messages({
                 "string.empty": "Department cannot be empty",
             }),
-            email : Joi.string().optional().messages({
+            email : Joi.string()
+            .email({ minDomainSegments: 2, tlds: { allow: ['com', 'ca', 'gov', 'net']}})
+            .required()
+            .messages({
                 "string.email": "Email must be valid",
+                "any.required": "Email is required",
                 "string.empty": "Email cannot be empty"
             }),
             phone: Joi.string().pattern(/^[0-9\-+() ]{7,20}$/).optional()
