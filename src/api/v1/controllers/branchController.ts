@@ -77,10 +77,12 @@ export const createBranch = async (
 ): Promise<void> => {
     try {
         const {
+            id,
             name,
             address,
             phone,
         }: {
+            id?: number;
             name?: string;
             address?: string;
             phone?: string;
@@ -106,6 +108,7 @@ export const createBranch = async (
         }  
 
             const newBranch: Branch = await branchService.createBranch({
+                id: Number(id),
                 name, 
                 address, 
                 phone 

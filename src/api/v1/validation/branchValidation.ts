@@ -3,6 +3,10 @@ import Joi from "joi";
 export const branchSchemas = {
     create: {
         body: Joi.object({
+             id: Joi.number().required().messages({
+                "any.required": "ID is required",
+                "number.base": "ID must be a number",
+            }),
             name: Joi.string().required().messages({
                 "any.required": "Name is required",
                 "string.empty": "Name cannot be empty"
@@ -21,9 +25,9 @@ export const branchSchemas = {
     },
     update: {
         params: Joi.object({
-            id: Joi.string().required().messages({
+            id: Joi.number().required().messages({
                 "any.required": "Branch ID is required",
-                "string.empty": "Branch ID cannot be empty"
+                "number.base": "ID must be a number"
             }),
         }),
         body: Joi.object({
