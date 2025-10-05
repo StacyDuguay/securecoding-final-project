@@ -42,5 +42,13 @@ export const branchSchemas = {
                 "string.pattern.base": "Phone number must be valid",
         }),
         })
-    }
-}
+    },
+    delete: {
+        params: Joi.object({
+            id: Joi.number().required().messages({
+                "any.required": "Branch ID is required",
+                "number.base": "Branch ID must be a number",
+            }),
+        }),
+    },
+};
