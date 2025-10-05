@@ -13,13 +13,18 @@ router.get("/department/:department", employeeController.getEmployeesByDepartmen
 router.post(
     "/",
     validateRequest(employeeSchemas.create),
-    employeeController.createEmployee);
+    employeeController.createEmployee
+);
 
 router.put(
     "/:id",
     validateRequest(employeeSchemas.update),
-    employeeController.updateEmployee);
+    employeeController.updateEmployee
+);
     
-router.delete("/:id", employeeController.deleteEmployee);
+router.delete("/:id", 
+    validateRequest(employeeSchemas.delete),
+    employeeController.deleteEmployee
+);
 
 export default router;

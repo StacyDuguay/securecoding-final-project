@@ -10,15 +10,19 @@ router.get("/", branchController.getAllBranches);
 router.post(
     "/", 
     validateRequest(branchSchemas.create),
-    branchController.createBranch);
+    branchController.createBranch
+);
 
 router.get("/:id", branchController.getBranchById);
 
 router.put(
     "/:id", 
     validateRequest(branchSchemas.update),
-    branchController.updateBranch);
+    branchController.updateBranch
+);
 
-router.delete("/:id", branchController.deleteBranch);
+router.delete("/:id",validateRequest(branchSchemas.delete),
+    branchController.deleteBranch
+);
 
 export default router;
