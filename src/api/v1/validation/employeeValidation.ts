@@ -30,7 +30,7 @@ export const employeeSchemas = {
                 "string.pattern.base" : "Phone number must be valid"
             }),
             branchId: Joi.number().integer().required().messages({
-                "any.required": "BranchId is required",
+                "number.base": "BranchId must be a number"
             }),
         }),
     },
@@ -53,7 +53,7 @@ export const employeeSchemas = {
             }),
             email : Joi.string()
             .email({ minDomainSegments: 2, tlds: { allow: ['com', 'ca', 'gov', 'net']}})
-            .required()
+            .optional()
             .messages({
                 "string.email": "Email must be valid",
                 "any.required": "Email is required",
@@ -63,8 +63,8 @@ export const employeeSchemas = {
             .messages({
                 "string.pattern.base": "Phone must be a valid number",
             }),
-            branchId: Joi.string().optional().messages({
-                "string.empty": "BranchId cannot be empty"
+            branchId: Joi.number().integer().optional().messages({
+                "number.base": "BranchId must be a number"
             }),
         }),
     }, 
