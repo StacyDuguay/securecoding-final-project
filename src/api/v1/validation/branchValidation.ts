@@ -6,7 +6,7 @@ export const branchSchemas = {
              id: Joi.number().required().messages({
                 "any.required": "ID is required",
                 "number.base": "ID must be a number",
-            }),
+            }).options({ convert: true }),
             name: Joi.string().required().messages({
                 "any.required": "Name is required",
                 "string.empty": "Name cannot be empty"

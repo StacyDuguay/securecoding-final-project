@@ -21,18 +21,19 @@ describe("Branch Validation Schemas", () => {
     // CREATE SCHEMA TEST
     it("should validate valid branch creation data", () => {
         mockReq.body = {
+            id: 1,  
             name: "Main Branch",
             address: "123 Main St",
             phone: "123-456-7890",
-        };
-        const middleware = validateRequest(branchSchemas.create);
+    }   ;
+    const middleware = validateRequest(branchSchemas.create);
 
-        middleware(mockReq as Request, mockRes as Response, mockNext);
+    middleware(mockReq as Request, mockRes as Response, mockNext);
 
-        expect(mockNext).toHaveBeenCalled();
-        expect(mockRes.status).not.toHaveBeenCalled();
-        expect(mockRes.json).not.toHaveBeenCalled();
-    });
+    expect(mockNext).toHaveBeenCalled();
+    expect(mockRes.status).not.toHaveBeenCalled();
+    expect(mockRes.json).not.toHaveBeenCalled();
+});
 
     it("should reject missing required fields for create schema", () => {
         mockReq.body = {

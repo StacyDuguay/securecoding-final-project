@@ -33,6 +33,7 @@ describe("Branch Routes", () => {
     describe("POST /api/v1/branches/", () => {
         it("should call createBranch controller with valid data", async () => {
             const mockBranch = {
+                id:1,
                 name: "Test Branch",
                 address: "123 Main St",
                 phone: "555-1234",
@@ -46,6 +47,7 @@ describe("Branch Routes", () => {
     describe("PUT /api/v1/branches/:id", () => {
         it("should call updateBranch controller with valid data", async () => {
             const mockBranch = {
+                id: 1,
                 name: "Updated Branch",
                 address: "456 Updated St",
                 phone: "555-5678",
@@ -61,5 +63,31 @@ describe("Branch Routes", () => {
             await request(app).delete("/api/v1/branches/1");
             expect(branchController.deleteBranch).toHaveBeenCalled();
         });
+    });
+});
+
+describe("POST /api/v1/branches/", () => {
+    beforeAll(() => {
+        // Make the controller async and include next parameter
+        jest.spyOn(branchController, "createBranch").mockImplementation(
+            async (req, res, next) => {
+                res.status(201).json({ id: req.body.id });
+            }
+        );
+    });
+
+    it("should call createBranch controller with valid data", async () => {
+        const mockBranch = {
+            id: 1,                 
+            name: "Test Branch",
+            address: "123 Main St",
+            phone: "555-1234",
+        };
+
+        await request(app)
+            .post("/api/v1/branches/")
+            .send(mockBranch);
+
+        expect(branchController.createBranch).toHaveBeenCalled();
     });
 });
