@@ -22,7 +22,6 @@ describe("Employee Validation Schemas", () => {
         mockNext = jest.fn();
     });
 
-    //CREATE SCHEMA TEST
     it("should validate valid employee creation data", () => {
         // Arrange
         mockReq.body = {
@@ -62,7 +61,6 @@ describe("Employee Validation Schemas", () => {
         });
     });
 
-    // UPDATE SCHEMA TEST
     it("should validate valid employee update data", () => {
         // Arrange
         mockReq.params = { id: "123" };

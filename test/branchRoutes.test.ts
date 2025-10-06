@@ -12,40 +12,49 @@ jest.mock("../src/api/v1/controllers/branchController.ts", () => ({
 }));
 
 describe("Branch Routes", () => {
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("GET /api/v1/branches/", () => {
         it("should call getAllBranches controller", async () => {
+            // Act
             await request(app).get("/api/v1/branches/");
+
+            // Assert
             expect(branchController.getAllBranches).toHaveBeenCalled();
         });
     });
 
     describe("GET /api/v1/branches/:id", () => {
         it("should call getBranchById controller with valid ID", async () => {
+            // Act
             await request(app).get("/api/v1/branches/1");
+
+            // Assert
             expect(branchController.getBranchById).toHaveBeenCalled();
         });
     });
 
     describe("POST /api/v1/branches/", () => {
         it("should call createBranch controller with valid data", async () => {
+            // Arrange
             const mockBranch = {
-                id:1,
+                id: 1,
                 name: "Test Branch",
                 address: "123 Main St",
                 phone: "555-1234",
             };
 
+            // Act
             await request(app).post("/api/v1/branches/").send(mockBranch);
+
+            // Assert
             expect(branchController.createBranch).toHaveBeenCalled();
         });
     });
 
     describe("PUT /api/v1/branches/:id", () => {
         it("should call updateBranch controller with valid data", async () => {
+            // Arrange
             const mockBranch = {
                 id: 1,
                 name: "Updated Branch",
@@ -53,41 +62,47 @@ describe("Branch Routes", () => {
                 phone: "555-5678",
             };
 
+            // Act
             await request(app).put("/api/v1/branches/1").send(mockBranch);
+
+            // Assert
             expect(branchController.updateBranch).toHaveBeenCalled();
         });
     });
 
     describe("DELETE /api/v1/branches/:id", () => {
         it("should call deleteBranch controller with valid data", async () => {
+            // Act
             await request(app).delete("/api/v1/branches/1");
+
+            // Assert
             expect(branchController.deleteBranch).toHaveBeenCalled();
         });
     });
 });
 
-describe("POST /api/v1/branches/", () => {
+describe("POST /api/v1/branches/ - mocked createBranch", () => {
     beforeAll(() => {
-        // Make the controller async and include next parameter
         jest.spyOn(branchController, "createBranch").mockImplementation(
-            async (req, res, next) => {
+            async (req, res) => {
                 res.status(201).json({ id: req.body.id });
             }
         );
     });
 
     it("should call createBranch controller with valid data", async () => {
+        // Arrange
         const mockBranch = {
-            id: 1,                 
+            id: 1,
             name: "Test Branch",
             address: "123 Main St",
             phone: "555-1234",
         };
 
-        await request(app)
-            .post("/api/v1/branches/")
-            .send(mockBranch);
+        // Act
+        await request(app).post("/api/v1/branches/").send(mockBranch);
 
+        // Assert
         expect(branchController.createBranch).toHaveBeenCalled();
     });
 });

@@ -18,31 +18,36 @@ describe("Branch Validation Schemas", () => {
         mockNext = jest.fn();
     });
 
-    // CREATE SCHEMA TEST
     it("should validate valid branch creation data", () => {
+        // Arrange
         mockReq.body = {
-            id: 1,  
+            id: 1,
             name: "Main Branch",
             address: "123 Main St",
             phone: "123-456-7890",
-    }   ;
-    const middleware = validateRequest(branchSchemas.create);
+        };
+        const middleware = validateRequest(branchSchemas.create);
 
-    middleware(mockReq as Request, mockRes as Response, mockNext);
+        // Act
+        middleware(mockReq as Request, mockRes as Response, mockNext);
 
-    expect(mockNext).toHaveBeenCalled();
-    expect(mockRes.status).not.toHaveBeenCalled();
-    expect(mockRes.json).not.toHaveBeenCalled();
-});
+        // Assert
+        expect(mockNext).toHaveBeenCalled();
+        expect(mockRes.status).not.toHaveBeenCalled();
+        expect(mockRes.json).not.toHaveBeenCalled();
+    });
 
     it("should reject missing required fields for create schema", () => {
+        // Arrange
         mockReq.body = {
             name: "Main Branch",
         };
         const middleware = validateRequest(branchSchemas.create);
 
+        // Act
         middleware(mockReq as Request, mockRes as Response, mockNext);
 
+        // Assert
         expect(mockNext).not.toHaveBeenCalled();
         expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
         expect(mockRes.json).toHaveBeenCalledWith({
@@ -50,28 +55,31 @@ describe("Branch Validation Schemas", () => {
         });
     });
 
-    // UPDATE SCHEMA TEST 
     it("should validate valid branch update data", () => {
+        // Arrange
         mockReq.params = { id: "1" };
-        mockReq.body = {
-            address: "456 New St",
-        };
+        mockReq.body = { address: "456 New St" };
         const middleware = validateRequest(branchSchemas.update);
 
+        // Act
         middleware(mockReq as Request, mockRes as Response, mockNext);
 
+        // Assert
         expect(mockNext).toHaveBeenCalled();
         expect(mockRes.status).not.toHaveBeenCalled();
         expect(mockRes.json).not.toHaveBeenCalled();
     });
 
     it("should reject invalid phone and missing id in update schema", () => {
-        mockReq.params = {}; 
+        // Arrange
+        mockReq.params = {};
         mockReq.body = { phone: "invalid-phone" };
         const middleware = validateRequest(branchSchemas.update);
 
+        // Act
         middleware(mockReq as Request, mockRes as Response, mockNext);
 
+        // Assert
         expect(mockNext).not.toHaveBeenCalled();
         expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
         expect(mockRes.json).toHaveBeenCalledWith({
