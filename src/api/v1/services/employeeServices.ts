@@ -21,7 +21,7 @@ const COLLECTION = "employees";
  */
 export const getAllEmployees = async (): Promise<Employee[]> => {
     try {
-        const snapshot: QuerySnapshot = await getDocuments(COLLECTION);
+        const snapshot: QuerySnapshot<DocumentData> = await getDocuments(COLLECTION);
 
         const employees: Employee[] = snapshot.docs.map((doc) => {
             const data = doc.data() as Partial<Employee>;

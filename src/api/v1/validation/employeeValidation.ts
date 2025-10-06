@@ -3,17 +3,23 @@ import Joi from "joi";
 export const employeeSchemas = {
     create: {
         body: Joi.object({
-            name: Joi.string().required().messages({
+            name: Joi.string().trim().min(2).max(30).required().messages({
                 "any.required": "Name is required",
-                "string.empty": "Name cannot be empty"
+                "string.empty": "Name cannot be empty",
+                "string.min": "Name must be at least 2 characters",
+                "string.max": "Name cannot exceed 30 characters"
             }),
-            position: Joi.string().required().messages({
+            position: Joi.string().trim().min(2).max(40).required().messages({
                 "any.required": "Position is required",
-                "string.empty": "Position cannot be empty"
+                "string.empty": "Position cannot be empty",
+                "string.min": "Position must be at least 2 characters",
+                "string.max": "Position cannot exceed 40 characters"
             }),
-            department: Joi.string().required().messages({
+            department: Joi.string().trim().min(2).max(30).required().messages({
                 "any.required": "Department is required",
                 "string.empty": "Department cannot be empty",
+                "string.min": "Department must be at least 2 characters",
+                "string.max": "Department cannot exceed 30 characters"
             }),
             email : Joi.string()
             .email({ minDomainSegments: 2, tlds: { allow: ['com', 'ca', 'gov', 'net']}})
@@ -42,14 +48,20 @@ export const employeeSchemas = {
             }),
         }),
         body: Joi.object({
-            name: Joi.string().optional().messages({
-                "string.empty": "Name cannot be empty"
+            name: Joi.string().trim().min(2).max(30).optional().messages({
+                "string.empty": "Name cannot be empty",
+                "string.min": "Name must be at least 2 characters",
+                "string.max": "Name cannot exceed 30 characters"
             }),
-            position: Joi.string().optional().messages({
-                "string.empty": "Position cannot be empty"
+            position: Joi.string().trim().min(2).max(40).optional().messages({
+                "string.empty": "Position cannot be empty",
+                "string.min": "Position must be at least 2 characters",
+                "string.max": "Position cannot exceed 40 characters"
             }),
-            department: Joi.string().optional().messages({
+            department: Joi.string().trim().min(2).max(30).optional().messages({
                 "string.empty": "Department cannot be empty",
+                "string.min": "Department must be at least 2 characters",
+                "string.max": "Department cannot exceed 30 characters"
             }),
             email : Joi.string()
             .email({ minDomainSegments: 2, tlds: { allow: ['com', 'ca', 'gov', 'net']}})

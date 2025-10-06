@@ -20,13 +20,12 @@ const COLLECTION: string = "branches";
  */
 export const getAllBranches = async (): Promise<Branch[]> => {
     try {
-        const snapshot: QuerySnapshot = await getDocuments(COLLECTION);
+        const snapshot: QuerySnapshot<DocumentData> = await getDocuments(COLLECTION);
 
         const branches: Branch[] = snapshot.docs.map((doc) => {
             const data = doc.data() as Partial<Branch>;
 
         return {
-            // Converts id string to number
             id: Number(data.id) || 0, 
             name: data.name ?? "",
             address: data.address ?? "",
@@ -37,7 +36,7 @@ export const getAllBranches = async (): Promise<Branch[]> => {
     return structuredClone(branches);
   } catch (error) {
     throw error;
-  };
+  }
 };
 
 /**
@@ -68,7 +67,7 @@ export const getBranchById = async (
         return structuredClone(branch);
   } catch (error) {
     throw error;
-  };
+  }
 };
 
 /**
@@ -122,7 +121,7 @@ export const updateBranch = async (
         return structuredClone(updatedBranch);
   } catch (error) {
     throw error;
-  };
+  }
 };
 
 /**
