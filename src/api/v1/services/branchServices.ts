@@ -1,5 +1,4 @@
 import { Branch } from "../models/branchModel";
-import { branches } from "../../../data/branches";
 import {
     QuerySnapshot,
     DocumentData,
@@ -27,7 +26,7 @@ export const getAllBranches = async (): Promise<Branch[]> => {
             const data = doc.data() as Partial<Branch>;
 
         return {
-            //Converts id string to number
+            // Converts id string to number
             id: Number(data.id) || 0, 
             name: data.name ?? "",
             address: data.address ?? "",
@@ -81,16 +80,22 @@ export const createBranch = async (
     branchData: Branch
 ): Promise<Branch> => {
     try {
-        const newBranch: Partial<Branch> = {
-            ...branchData,
-        };
+    const existingBranch = await getBranchById(branchData.id).catch((err) => {
+      if (err.message.includes("not found")) return null;
+      throw err; 
+    });
 
-        await createDocument<Branch>(COLLECTION, newBranch, branchData.id.toString());
-
-        return structuredClone(newBranch as Branch);
-    } catch (error: unknown) {
-        throw error;
+    if (existingBranch) {
+      throw new Error(`Branch with ID ${branchData.id} already exists`);
     }
+
+    const newBranch: Partial<Branch> = { ...branchData };
+    await createDocument<Branch>(COLLECTION, newBranch, branchData.id.toString());
+
+    return structuredClone(newBranch as Branch);
+  } catch (error) {
+    throw error;
+  }
 };
 
 /**

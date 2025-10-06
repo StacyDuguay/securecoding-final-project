@@ -1,7 +1,4 @@
 import { Employee } from "../models/employeeModel";
-import { employees } from "../../../data/employees"
-import { Branch } from "../models/branchModel";
-import { branches } from "src/data/branches";
 import {
     QuerySnapshot,
     DocumentData,
