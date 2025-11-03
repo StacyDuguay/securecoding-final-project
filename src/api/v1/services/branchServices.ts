@@ -12,7 +12,7 @@ import {
     deleteDocument,
 } from "../repositories/firestoreRepository";
 
-const COLLECTION: string = "branches";
+const COLLECTION = "branches";
 
 /**
  * Get all branches
@@ -24,32 +24,29 @@ export const getAllBranches = async (): Promise<Branch[]> => {
 
         const branches: Branch[] = snapshot.docs.map((doc) => {
             const data = doc.data() as Partial<Branch>;
+            return {
+                id: doc.id, 
+                name: data.name ?? "",
+                address: data.address ?? "",
+                phone: data.phone ?? "",
+            };
+        });
 
-        return {
-            id: Number(data.id) || 0, 
-            name: data.name ?? "",
-            address: data.address ?? "",
-            phone: data.phone ?? "",
-        };
-    });
-
-    return structuredClone(branches);
-  } catch (error) {
-    throw error;
-  }
+        return structuredClone(branches);
+    } catch (error) {
+        throw error;
+    }
 };
 
 /**
  * Get a branch by ID
- * @param id - Branch ID
+ * @param id - Firestore document ID
  * @returns - Branch object
  * @throws - Error if branch not found
  */
-export const getBranchById = async (
-    id: number
-): Promise<Branch> => {
+export const getBranchById = async (id: string): Promise<Branch> => {
     try {
-        const doc: DocumentSnapshot | null = await getDocumentById(COLLECTION, id.toString());
+        const doc: DocumentSnapshot<DocumentData> | null = await getDocumentById(COLLECTION, id);
 
         if (!doc || !doc.exists) {
             throw new Error(`Branch with ID ${id} not found`);
@@ -58,54 +55,49 @@ export const getBranchById = async (
         const data = doc.data() as Partial<Branch>;
 
         const branch: Branch = {
-            id: Number(data.id) || id,
+            id: doc.id,
             name: data.name ?? "",
             address: data.address ?? "",
             phone: data.phone ?? "",
         };
 
         return structuredClone(branch);
-  } catch (error) {
-    throw error;
-  }
+    } catch (error) {
+        throw error;
+    }
 };
 
 /**
  * Create a new branch
- * @param branchData - The data for the new branch
+ * @param branchData - The data for the new branch (no ID)
  * @returns - The created branch with generated ID
  */
 export const createBranch = async (
-    branchData: Branch
+    branchData: Omit<Branch, "id">
 ): Promise<Branch> => {
     try {
-    const existingBranch = await getBranchById(branchData.id).catch((err) => {
-      if (err.message.includes("not found")) return null;
-      throw err; 
-    });
+        const newId = await createDocument<Branch>(COLLECTION, branchData);
 
-    if (existingBranch) {
-      throw new Error(`Branch with ID ${branchData.id} already exists`);
+        const newBranch: Branch = {
+            id: newId, 
+            ...branchData,
+        };
+
+        return structuredClone(newBranch);
+    } catch (error) {
+        throw error;
     }
-
-    const newBranch: Partial<Branch> = { ...branchData };
-    await createDocument<Branch>(COLLECTION, newBranch, branchData.id.toString());
-
-    return structuredClone(newBranch as Branch);
-  } catch (error) {
-    throw error;
-  }
 };
 
 /**
  * Update an existing branch
- * @param id - Branch ID
+ * @param id - Firestore document ID
  * @param branchData - Fields to update
  * @returns - Updated branch
  * @throws - Error if branch not found
  */
 export const updateBranch = async (
-    id: number,
+    id: string,
     branchData: Partial<Omit<Branch, "id">>
 ): Promise<Branch> => {
     try {
@@ -116,26 +108,24 @@ export const updateBranch = async (
             ...branchData,
         };
 
-        await updateDocument<Branch>(COLLECTION, id.toString(), updatedBranch);
+        await updateDocument<Branch>(COLLECTION, id, updatedBranch);
 
         return structuredClone(updatedBranch);
-  } catch (error) {
-    throw error;
-  }
+    } catch (error) {
+        throw error;
+    }
 };
 
 /**
  * Delete a branch
- * @param id - Branch ID
+ * @param id - Firestore document ID
  * @throws - Error if branch not found
  */
-export const deleteBranch = async (
-    id: number
-): Promise<void> => {
+export const deleteBranch = async (id: string): Promise<void> => {
     try {
         await getBranchById(id); 
-        await deleteDocument(COLLECTION, id.toString());
-  } catch (error) {
-    throw error;
-  }
-};
+        await deleteDocument(COLLECTION, id);
+    } catch (error) {
+        throw error;
+    }
+}

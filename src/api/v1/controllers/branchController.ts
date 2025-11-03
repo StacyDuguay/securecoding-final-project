@@ -46,7 +46,7 @@ export const getBranchById = async (
             return;
         }
 
-        const branch: Branch | null = await branchService.getBranchById(Number(id));
+        const branch: Branch | null = await branchService.getBranchById(id);
 
         if (!branch) {
             res.status(HTTP_STATUS.NOT_FOUND).json({
@@ -77,12 +77,10 @@ export const createBranch = async (
 ): Promise<void> => {
     try {
         const {
-            id,
             name,
             address,
             phone,
         }: {
-            id?: number;
             name?: string;
             address?: string;
             phone?: string;
@@ -107,18 +105,16 @@ export const createBranch = async (
             return;
         }  
 
-            const newBranch: Branch = await branchService.createBranch({
-                id: Number(id),
-                name, 
-                address, 
-                phone 
-            });
+        const newBranch: Branch = await branchService.createBranch({
+            name, 
+            address, 
+            phone 
+        });
 
-            res.status(HTTP_STATUS.CREATED).json({
-                message: "Branch created successfully",
-                data: newBranch,
-            });
-        
+        res.status(HTTP_STATUS.CREATED).json({
+            message: "Branch created successfully",
+            data: newBranch,
+        });
     } catch (error: unknown) {
         next(error);
     }
@@ -147,7 +143,7 @@ export const updateBranch = async (
             phone?: string;
         } = req.body;
 
-        const updatedBranch: Branch = await branchService.updateBranch(Number(id), {
+        const updatedBranch: Branch = await branchService.updateBranch(id!, {
             name,
             address,
             phone,
@@ -176,7 +172,7 @@ export const deleteBranch = async (
     try {
         const { id }: { id?: string } = req.params;
 
-        await branchService.deleteBranch(Number(id));
+        await branchService.deleteBranch(id!);
         res.status(HTTP_STATUS.OK).json({
             message: "Branch deleted successfully",
         });
