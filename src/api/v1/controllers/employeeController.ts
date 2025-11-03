@@ -46,7 +46,7 @@ export const getEmployeeById = async (
             return;
         }
 
-        const employee: Employee | null = await employeeService.getEmployeeById(Number(id));
+        const employee: Employee | null = await employeeService.getEmployeeById(id);
 
         if (!employee) {
             res.status(HTTP_STATUS.NOT_FOUND).json({
@@ -77,25 +77,25 @@ export const createEmployee = async (
 ): Promise<void> => {
     try {
         const {
-            name, 
+            name,
             position,
-            department, 
-            email, 
-            phone, 
-            branchId 
+            department,
+            email,
+            phone,
+            branchId,
         }: {
             name?: string;
             position?: string;
             department?: string;
             email?: string;
             phone?: string;
-            branchId?: number
-        }= req.body;
+            branchId?: string;
+        } = req.body;
 
         if (!name) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "Employee name is required" });
             return;
-        }   
+        }
         if (!position) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "Employee position is required" });
             return;
@@ -147,24 +147,24 @@ export const updateEmployee = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { id }: {id?: number} = req.params;
+        const { id }: { id?: string } = req.params;
         const {
-            name, 
+            name,
             position,
-            department, 
-            email, 
-            phone, 
-            branchId 
+            department,
+            email,
+            phone,
+            branchId,
         }: {
             name?: string;
             position?: string;
             department?: string;
             email?: string;
             phone?: string;
-            branchId?: number
-        }= req.body;
+            branchId?: string;
+        } = req.body;
 
-        const updatedEmployee: Employee = await employeeService.updateEmployee(Number(id), {
+        const updatedEmployee: Employee = await employeeService.updateEmployee(id as string, {
             name,
             position,
             department,
@@ -194,9 +194,9 @@ export const deleteEmployee = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { id }: {id?: string} = req.params;
+        const { id }: { id?: string } = req.params;
 
-        await employeeService.deleteEmployee(Number(id));
+        await employeeService.deleteEmployee(id as string);
         res.status(HTTP_STATUS.OK).json({
             message: "Employee deleted successfully",
         });
@@ -217,15 +217,15 @@ export const getEmployeesByBranch = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { branchId }: {branchId?: string} = req.params;
+        const { branchId }: { branchId?: string } = req.params;
         if (!branchId) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
-                 message: "Branch ID is required" 
-                });
+                message: "Branch ID is required",
+            });
             return;
         }
 
-        const employees = await employeeService.getEmployeesByBranch(Number(branchId));
+        const employees = await employeeService.getEmployeesByBranch(branchId);
 
         res.status(HTTP_STATUS.OK).json({
             message: "Employees for branch retrieved successfully",
@@ -248,10 +248,10 @@ export const getEmployeesByDepartment = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { department }: {department?: string} = req.params;
+        const { department }: { department?: string } = req.params;
         if (!department) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({ 
-                message: "Department is required" 
+            res.status(HTTP_STATUS.BAD_REQUEST).json({
+                message: "Department is required",
             });
             return;
         }
