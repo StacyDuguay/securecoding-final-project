@@ -266,3 +266,4 @@ export const getEmployeesByDepartment = async (
         next(error);
     }
 };
+

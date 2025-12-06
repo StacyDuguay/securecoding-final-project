@@ -26,3 +26,4 @@ router.delete("/:id",validateRequest(branchSchemas.delete),
 );
 
 export default router;
+
